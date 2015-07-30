@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> MakeUp MatchUp </title>
+	<!-- Rendering and touch zoom -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Access Mobile Stylesheet -->
+	<!--link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" /-->
+	<!-- Load JQuery -->
+	<meta charset="utf-8"> <!--has to do with making it accessible-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <meta charset="utf-8"> <!--has to do with making it accessible-->
+    <title>MakeUp MatchUp</title>
+    
+
+<style>
+
+p {
+	font-family: Ariel, Verdana, Times; 
+}
+hr { 
+    display: block;   
+    margin-left: 0;
+    margin-right: auto;
+    border-width: 6px;
+	border-style: solid;
+	color: black;
+	width: 100%;
+}
+
+/* footer */
+h4 {
+	color: #000000;
+	background-color: #ffffff;
+	size: 2;
+}
+
+.footer {
+    position: fixed; 
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+}
+/*.background {
+	background: #000000;
+	border:45px solid black;
+	width: 15%; 
+}*/
+
+
+#theHeader {
+	background-color: #ffffff;
+
+}
+
+
+#theMainPage {
+	background-color: #ffffff;
+
+}
+
+#theFooter {
+	background-color: #ffffff;
+}
+
+#mainpage {
+	border: none;
+	background-color:#ffffff;
+}
+
+div.img {
+    margin: 5px;
+    padding: 5px;
+    border: 10px solid #000000;
+    height: auto;
+    width: auto;
+    float: middle;
+    text-align: center;
+}	
+
+div.img img {
+    display: inline;
+    margin: 5px;
+    border: 1px solid #ffffff;
+}
+
+div.img a:hover img {
+    border: 1px solid #0000ff;
+}
+
+div.desc {
+  text-align: center;
+  font-weight: normal;
+  width: 120px;
+  margin: 5px;
+}
+
+</style>
+
+  <script type="text/javascript">
+	var color;
+  
+    function hexToRGB(h){
+	function HexToR(h) {return parseInt((cutHex(h)).substring(0,2),16)}
+	function HexToG(h) {return parseInt((cutHex(h)).substring(2,4),16)}
+	function HexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
+	function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
+	
+	var R = HexToR(h);
+	var G = HexToG(h);
+	var B = HexToB(h);
+	
+	if ((R >= 220 && R <= 230) && (G >= 180 && G <= 200) && (B >= 170 && B <= 180)){
+		//alert("Laura Mercier - Porcelian"); //pink
+		var modelFound = "Laura Mercier - Porcelian";
+		document.getElementById("modelFound").innerHTML = modelFound;
+		document.getElementById("modelImage").innerHTML = '<img src=\"http://i60.tinypic.com/15484n5.png\">';
+	}
+	else if ((R >= 155 && R <= 165) && (G >= 115 && G <= 125) && (B >= 80 && B <= 90)){
+		//alert("Make Up For Ever - Beige Nude"); //purple
+		var danFound = "Make Up For Ever - Beige Nude";
+		document.getElementById("danFound").innerHTML = danFound;
+		document.getElementById("danImage").innerHTML = '<img src=\"http://i62.tinypic.com/23kp74n.png\">';
+	}
+	else if ((R >= 90 && R <= 105) && (G >= 60 && G <= 70) && (B >= 50 && B <= 60)){
+		//alert("Laura Mercier - Walnut") //blue
+		var result = "Laura Mercier - Walnut";
+		document.getElementById("result").innerHTML = result;
+		document.getElementById("azondeImage").innerHTML = '<img src=\"http://i57.tinypic.com/33mu70p.png\">';
+		//add an image to the same "result" innerHTML
+	}
+	return ([R,G,B]);
+	console.log([R,G,B]);
+}
+ function doItModel() { //creating a function
+     var output = $.ajax({ //returning response from JQuery library
+        url:'https://apicloud-colortag.p.mashape.com/tag-url.json?palette=simple&sort=relevance&url=http%3A%2F%2Fimages.wisegeek.com%2Ftriangular-face.jpg', // The URL to the API. You can get this by clicking on "Show CURL example" from an API profile
+	    type: 'POST', // The HTTP Method, can be GET POST PUT DELETE etc, get the image from the url and get the colors
+        data: {}, // Additional parameters here, where data goes into
+        dataType: 'json', //calling json (like a dictionary)
+        success: function(data) { //when url is valid
+            //Change data.source to data.something , where something is whichever part of the object you want returned.
+            //To see the whole object you can output it to your browser console using:
+            console.log(data.tags[0].label); //gets color label
+        console.log(data.tags[0].color); //gets primary color hex value
+        color = data.tags[0].color;
+        //console.log(color);
+        $("#output").append(color);
+        //document.getElementById("output").innerHTML = data.tags[0].label; //getting everything from output and returning it
+        var temp = hexToRGB(color);
+		console.log(temp);
+		},
+        error: function(err) { alert(err); }, //if there's an error (when url is invalid)
+        beforeSend: function(xhr) { //set the request header (telling API that it wants to use it)
+        xhr.setRequestHeader("X-Mashape-Authorization", "9UeIBqZtKEmshn4OUTUlCV9UeZHMp1MeXfujsnV5Ue313ZqX6R"); // Enter here your Mashape key
+        }
+    });
+  }
+
+  function doItAzonde() { //creating a function
+     var output = $.ajax({ //returning response from JQuery library
+        url:'https://apicloud-colortag.p.mashape.com/tag-url.json?palette=simple&sort=relevance&url=http://i60.tinypic.com/tapk3k.jpg',// The URL to the API. You can get this by clicking on "Show CURL example" from an API profile
+	    type: 'POST', // The HTTP Method, can be GET POST PUT DELETE etc, get the image from the url and get the colors
+        data: {}, // Additional parameters here, where data goes into
+        dataType: 'json', //calling json (like a dictionary)
+        success: function(data) { //when url is valid
+            //Change data.source to data.something , where something is whichever part of the object you want returned.
+            //To see the whole object you can output it to your browser console using:
+            console.log(data.tags[0].label); //gets color label
+        console.log(data.tags[0].color); //gets primary color hex value
+        color = data.tags[0].color;
+        //console.log(color);
+        $("#output").append(color);
+        //document.getElementById("output").innerHTML = data.tags[0].label; //getting everything from output and returning it
+        var temp = hexToRGB(color);
+		console.log(temp);
+		},
+        error: function(err) { alert(err); }, //if there's an error (when url is invalid)
+        beforeSend: function(xhr) { //set the request header (telling API that it wants to use it)
+        xhr.setRequestHeader("X-Mashape-Authorization", "9UeIBqZtKEmshn4OUTUlCV9UeZHMp1MeXfujsnV5Ue313ZqX6R"); // Enter here your Mashape key
+        }
+    });
+  }
+  
+  function doItDanika() { //creating a function
+     var output = $.ajax({ //returning response from JQuery library
+        url:'https://apicloud-colortag.p.mashape.com/tag-url.json?palette=W3C&sort=relevance&url=http://i58.tinypic.com/2m7yaee.jpg', // The URL to the API. You can get this by clicking on "Show CURL example" from an API profile
+	    type: 'POST', // The HTTP Method, can be GET POST PUT DELETE etc, get the image from the url and get the colors
+        data: {}, // Additional parameters here, where data goes into
+        dataType: 'json', //calling json (like a dictionary)
+        success: function(data) { //when url is valid
+            //Change data.source to data.something , where something is whichever part of the object you want returned.
+            //To see the whole object you can output it to your browser console using:
+            console.log(data.tags[1].label); //gets color label
+        console.log(data.tags[1].color); //gets primary color hex value
+        color = data.tags[1].color;
+        //console.log(color);
+        $("#output").append(color);
+        //document.getElementById("output").innerHTML = data.tags[0].label; //getting everything from output and returning it
+        var temp = hexToRGB(color);
+		console.log(temp);
+		},
+        error: function(err) { alert(err); }, //if there's an error (when url is invalid)
+        beforeSend: function(xhr) { //set the request header (telling API that it wants to use it)
+        xhr.setRequestHeader("X-Mashape-Authorization", "9UeIBqZtKEmshn4OUTUlCV9UeZHMp1MeXfujsnV5Ue313ZqX6R"); // Enter here your Mashape key
+        }
+    });
+  }
+</script>
+</head>
+<body>
+
+<div data-role="page" id="mainpage">
+	<!-- HEADER OF THE PAGE -->
+	<div data-role="header" id="theHeader">
+		<!-- MAKEUP MATCHUP BANNER -->
+		<div class="main-header" data-role="banner">
+			<center><a href="#mainpage"><img id ="picHolder" img src="http://i57.tinypic.com/1zn3pk6.png" border="0" height="140" width="320" align="middle" alt="Banner Image"/></img></a></center>
+		</div>
+		
+		<!--<a href="#azondeRocks"><img id = "picHolder" img src="azonde.jpeg" margin="40px" border="30" height="25%" width="25%" align="left"/></img></a> -->
+		
+		<!-- foundation pics for banner -->
+		<div id = "theBanner">
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+				<center><p><font size="2%" margin="0px"> makeup for you </font></p></center>
+				<hr>
+		</div>
+	</div> <!-- End of header -->
+
+
+
+	<!-- START OF THE MAIN PAGE --> 
+	<div data-role="main" id="theMainPage">
+<!-- container for camera upload image -->
+		<div class="background"> 
+			<!--style = "height: 400px; width: 400px; background-color: #141414; text-align: center;"--> 
+			<!--p align="center"><img src="uploadcamera.png" border="45px" border-color="#000000" height="240" width="260"></a></p-->
+		</div>
+		
+<!-- upload now pic -->
+
+	<div id="pictures" style="text-align: center; float:center">
+		<!--upload-->
+		<a href="#bar"><img id="picHolder" src="http://i61.tinypic.com/jg5zy8.png" height="240" width="260"/></a>
+		<p> Upload Image </p> 
+		</div>
+<!--about us-->
+	<div id="pictures" style="text-align: center;float:center">
+		<a href="#About"><img id="picHolder" src="http://i57.tinypic.com/2chm2o0.jpg" height="260" width="260"/></a>
+		<p> About Us </p> 
+	</div>
+
+	
+	
+	</div><!-- END OF MAIN DATA-ROLE --> 
+
+
+<!-- Credits -->
+	<!-- START OF FOOTER -->
+	<div data-role="footer" id="theFooter">
+		<center><p><font size="2"> MakeUp MatchUp  // Created By: Kimberly B. Azondé G. Ellie P. Danika J.</font></p></center>
+
+
+	</div> <!-- End of FOOTER -->
+</div> <!-- End of PAGE -->
+
+			
+<!--START OF SECOND PAGE-->
+<div data-role="page" id="bar">
+
+<div data-role="header" id="theHeader">
+		<!-- MAKEUP MATCHUP BANNER -->
+		<div class="main-header" data-role="banner">
+			<center><a href="#mainpage"><img id ="picHolder" img src="http://i57.tinypic.com/1zn3pk6.png" border="0" height="140" width="320" align="middle" alt="Banner Image"/></img></a></center>
+		</div>
+		
+		<!-- foundation pics for banner -->
+		<div id = "theBanner">
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+				<center><p><font size="2%" margin="0px"> makeup for you </font></p></center>
+				<hr>
+		</div>
+	</div> <!-- End of header -->
+
+  
+<!-- CONTENT FOR SECOND PAGE -->
+<div data-role="content">
+<center><h1> My Uploaded Images </h1></center>
+<!-- 3 IMAGES-->
+<center>
+<div>
+<a href="#azondeRocks" ><img id = "picHolder" img src="http://i57.tinypic.com/10fqfph.jpg" margin="40px" border="30" height="25%" width="25%" align="center"/></img></a>
+<a href ="#danikaFace"><img id = "picHolder" img src="http://i61.tinypic.com/200s3gj.jpg" margin="40px" border="30" height="25%" width="25%" align="center"/></img></a>
+<a href ="#modelFace"> <img id = "picHolder" img src="http://i61.tinypic.com/wak329.jpg" margin="40px" border="30" height="15%" width="15%" align="center"/></img></a>
+</div>
+</center>
+<!--  //  -->
+</div>
+<!--FOOTER FOR SECOND PAGE-->
+<div data-role="footer" id="theFooter">
+		<center><p><font size="2"> MakeUp MatchUp  // Created By: Kimberly B. Azondé G. Ellie P. Danika J.</font></p></center>
+	</div> <!-- End of FOOTER -->
+</div> <!-- End of PAGE -->
+
+
+<!---- THIRD Page--->
+ <div data-role="page" id="azondeRocks">
+<!-- HEADER OF THE PAGE -->
+<div data-role="header" id="theHeader">
+		<!-- MAKEUP MATCHUP BANNER -->
+		<div class="main-header" data-role="banner">
+			<center><a href="#mainpage"><img id ="picHolder" img src="http://i57.tinypic.com/1zn3pk6.png" border="0" height="140" width="320" align="middle" alt="Banner Image"/></img></a></center>
+		</div>
+		
+		<!-- foundation pics for banner -->
+		<div id = "theBanner">
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+				<center><p><font size="2%" margin="0px"> makeup for you </font></p></center>
+				<hr>
+		</div> 
+	</div> <!-- End of header -->
+	<button id="button" onClick="doItAzonde()">Azonde</button> 
+	<center><div id="result"> </div> <!-- name of the product -->
+	<div id="azondeImage"> </div></center>
+	<!--FOOTER FOR SECOND PAGE-->
+<div data-role="footer" id="theFooter">
+		<center><p><font size="2"> MakeUp MatchUp  // Created By: Kimberly B. Azondé G. Ellie P. Danika J.</font></p></center>
+	</div> <!-- End of FOOTER -->
+</div> <!-- End of PAGE -->
+	
+	
+	
+	
+	
+	<!---- FOURTH Page--->
+ <div data-role="page" id="danikaFace">
+<!-- HEADER OF THE PAGE -->
+<div data-role="header" id="theHeader">
+		<!-- MAKEUP MATCHUP BANNER -->
+		<div class="main-header" data-role="banner">
+			<center><a href="#mainpage"><img id ="picHolder" img src="http://i57.tinypic.com/1zn3pk6.png" border="0" height="140" width="320" align="middle" alt="Banner Image"/></img></a></center>
+		</div>
+		
+		<!-- foundation pics for banner -->
+		<div id = "theBanner">
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+				<center><p><font size="2%" margin="0px"> makeup for you </font></p></center>
+				<hr>
+		</div> 
+	</div> <!-- End of header -->
+	<button id="button" onClick="doItDanika()">Danika</button>
+	<center><div id="danFound"> </div>
+	<div id="danImage"> </div></center>
+	<!--FOOTER FOR SECOND PAGE-->
+<div data-role="footer" id="theFooter">
+		<center><p><font size="2"> MakeUp MatchUp  // Created By: Kimberly B. Azondé G. Ellie P. Danika J.</font></p></center>
+
+
+	</div> <!-- End of FOOTER -->
+</div> <!-- End of PAGE -->
+
+
+
+<!---- FIFTH PAGE--->
+ <div data-role="page" id="modelFace">
+<!-- HEADER OF THE PAGE -->
+<div data-role="header" id="theHeader">
+		<!-- MAKEUP MATCHUP BANNER -->
+		<div class="main-header" data-role="banner">
+			<center><a href="#mainpage"><img id ="picHolder" img src="http://i57.tinypic.com/1zn3pk6.png" border="0" height="140" width="320" align="middle" alt="Banner Image"/></img></a></center>
+		</div>
+		<!-- foundation pics for banner -->
+		<div id = "theBanner">
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+				<center><p><font size="2%" margin="0px"> makeup for you </font></p></center>
+				<hr>
+		</div> 
+	</div> <!-- End of header -->
+	<button id="button" onClick="doItModel()">Model</button> 
+	<center><div id="modelFound"> </div>
+	<div id="modelImage"> </div></center>
+	<!--FOOTER FOR SECOND PAGE-->
+<div data-role="footer" id="theFooter">
+		<center><p><font size="2"> MakeUp MatchUp  // Created By: Kimberly B. Azondé G. Ellie P. Danika J.</font></p></center>
+	</div> <!-- End of FOOTER -->
+	</div> <!-- End of PAGE -->
+
+
+	
+
+
+<!--START OF ABOUT PAGE-->
+<div data-role="page" id="About">
+
+<div data-role="header" id="theHeader">
+		<!-- MAKEUP MATCHUP BANNER -->
+		<div class="main-header" data-role="banner">
+			<center><a href="#mainpage"><img id ="picHolder" img src="http://i57.tinypic.com/1zn3pk6.png" border="0" height="140" width="320" align="middle" alt="Banner Image"/></img></a></center>
+		</div>
+		
+		<!-- foundation pics for banner -->
+		<div id = "theBanner">
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="left"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+
+
+			<!--div class="main-header" data-role="banner"-->
+				<img src="http://i59.tinypic.com/vnjcb6.jpg" margin="0px" border="0" height="40%" width="25%" align="right"/>
+			<!--/div-->
+				<center><p><font size="2%" margin="0px"> makeup for you </font></p></center>
+				<hr>
+		</div>
+	</div> <!-- End of header -->
+
+  
+<!-- CONTENT FOR ABOUT PAGE -->
+<div data-role="content">
+<center><h1>Our Goal</h1></center>
+<center><p> Are you spending too much time and money trying to find the best makeup products for you?
+MakeUp MatchUp is an app that allows makeup consumers to easily identify makeup that fits their unique preferences. 
+Once users upload a head shot of themselves, MakeUp MatchUp quickly matches their skin tone to the proper foundation. </p></center>
+<center><h2>Meet The Creators!</h2></center>
+
+<div class="img">
+ <a target="_blank" href="http://i58.tinypic.com/2ry28t0.jpg"><img src="http://i58.tinypic.com/2ry28t0.jpg" alt="Kim B" width="260" height="230"></a>
+ <div class="desc"><p>Kimberly Bleak</p> <p>16 Years Old</p> <p>Creator</p> <p><b>Student at Marymount High School</b></p></div>
+</div>
+<div class="img">
+ <a target="_blank" href="http://i57.tinypic.com/119tshf.jpg"><img src="http://i57.tinypic.com/119tshf.jpg" alt="Azonde" width="280" height="200"></a>
+ <div class="desc"><p>Azonde Gordon</p> <p> 15 Years Old</p><p><b>Student at Santa Monica High School</b></p></div>
+</div>
+<div class="img">
+ <a target="_blank" href="http://i59.tinypic.com/2uz6mg5.jpg"><img src="http://i59.tinypic.com/2uz6mg5.jpg" alt="Danika" width="270" height="200"></a>
+ <div class="desc"><p>Danika Jaskulak-Gonzalez</p><p>16 Years Old</p><p><b>Student at Lambert High School</b></p></div>
+</div>
+
+<div class="img">
+ <a target="_blank" href="http://i61.tinypic.com/20rmt78.jpg"><img src="http://i61.tinypic.com/20rmt78.jpg" alt="Ellie" width="250" height="320"></a>
+ <div class="desc"><p>Ellie Pearson</p><p>15 Years Old</p><p><b>Student at New West Charter School</b></p></div>
+
+
+<!--FOOTER FOR ABOUT PAGE-->
+<div data-role="footer" id="theFooter">
+		<center><p><font size="2"> MakeUp MatchUp  // Created By: Kimberly B. Azondé G. Ellie P. Danika J.</font></p></center>
+
+
+	</div> <!-- End of FOOTER -->
+</div> <!-- End of PAGE -->
+	
+
+</div>
+
+
+	
+	
+	
+ <!-- <button onclick="doIt()">Run the request</button> creating a button-->
+ <!-- <div id="output">The API request is:</div--> 
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+ 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> </script>
+
+
+
+
+</body>
+</html>
